@@ -6,7 +6,9 @@ package validationapi;
  * Regles obligatòries:
  *  - El nom de l'usuari no pot estar buit i ha de començar amb majúscula.
  *  - Els cognoms són obligatoris.
- *  - El DNI és obligatori, alfanumèric i de 9 caràcters com a màxim.
+ *  - El DNI és obligatori, i ha de tenir 9 caràcters:
+ *                                                  8 xifres i una lletra,
+ *                                                  o una lletra, 7 xifres i una lletra.
  *  - El telèfon és obligatori, només dígits i de 15 caràcters com a màxim.
  *
  * Els mètodes llancen ValidationException amb una clau de text. Això permet
@@ -14,7 +16,8 @@ package validationapi;
  */
 public final class ValidationAPI {
 
-    public static final int MAX_DNI = 9;
+    public static final int LONGITUD_DNI = 9;
+    private static final String PATRO_DNI = "(?:[0-9]{8}[A-Za-z] | [A-Za-z][0-9]{7}[A-Za-z])";
     public static final int MAX_TELEFON = 15;
 
     private ValidationAPI() {
@@ -51,7 +54,7 @@ public final class ValidationAPI {
         }
 
         String text = dni.trim();
-        if (text.length() > MAX_DNI || !text.matches("[A-Za-z0-9]+")) {
+        if (text.length() != LONGITUD_DNI || !text.matches(PATRO_DNI)) {
             throw new ValidationException("dni.format");
         }
     }

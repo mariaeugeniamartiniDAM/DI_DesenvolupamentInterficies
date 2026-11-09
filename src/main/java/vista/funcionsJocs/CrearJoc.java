@@ -7,6 +7,7 @@ package vista.funcionsJocs;
 import java.awt.Font;
 import java.util.EnumMap;
 import java.util.Map;
+import java.text.ParseException;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
@@ -14,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
+import javax.swing.JFormattedTextField;
 import model.Genere;
 import model.GestorDades;
 import model.Plataforma;
@@ -293,7 +295,13 @@ public class CrearJoc extends javax.swing.JDialog {
         actualitzarSpinner(jCheckBoxXBOX, jSpinnerUnitatsXbox);
         actualitzarSpinner(jCheckBoxPC, jSpinnerUnitatsPC);
         actualitzarSpinner(jCheckBoxSwitch2, jSpinnerUnitatsSwitch2);
-
+        
+        configurarEditorSpinner(
+                jSpinnerUnitatsPS5,
+                jSpinnerUnitatsXbox,
+                jSpinnerUnitatsPC,
+                jSpinnerUnitatsSwitch2
+        );
         aplicarTextos();
     }
 
@@ -321,6 +329,13 @@ public class CrearJoc extends javax.swing.JDialog {
         jCheckBoxSwitch2.setText(Plataforma.SWITCH2.getNom());
     }
 
+    private void configurarEditorSpinner(JSpinner... spinners) {
+        for (JSpinner spinner : spinners) {
+        JSpinner.DefaultEditor editor = (JSpinner.DefaultEditor) spinner.getEditor();
+        editor.getTextField().setFocusLostBehavior(JFormattedTextField.PERSIST);
+        }
+    }
+    
     private void actualitzarSpinner(JCheckBox checkBox, JSpinner spinner) {
         spinner.setEnabled(checkBox.isSelected());
         if (!checkBox.isSelected()) {
@@ -347,10 +362,18 @@ public class CrearJoc extends javax.swing.JDialog {
         }
 
         Map<Plataforma, Integer> estoc = new EnumMap<>(Plataforma.class);
-        afegirEstoc(estoc, jCheckBoxPS5, jSpinnerUnitatsPS5, Plataforma.PS5);
-        afegirEstoc(estoc, jCheckBoxXBOX, jSpinnerUnitatsXbox, Plataforma.XBOX);
-        afegirEstoc(estoc, jCheckBoxPC, jSpinnerUnitatsPC, Plataforma.PC);
-        afegirEstoc(estoc, jCheckBoxSwitch2, jSpinnerUnitatsSwitch2, Plataforma.SWITCH2);
+        if (!afegirEstoc(estoc, jCheckBoxPS5, jSpinnerUnitatsPS5, Plataforma.PS5)) {
+            return;
+        }
+        if (!afegirEstoc(estoc, jCheckBoxXBOX, jSpinnerUnitatsXbox, Plataforma.XBOX)) {
+            return;
+        }
+        if (!afegirEstoc(estoc, jCheckBoxPC, jSpinnerUnitatsPC, Plataforma.PC)) {
+            return;
+        }
+        if (!afegirEstoc(estoc, jCheckBoxSwitch2, jSpinnerUnitatsSwitch2, Plataforma.SWITCH2)) {
+            return;
+        }
 
         if (estoc.isEmpty()) {
             mostrarError(Textes.get("error.plataforma.obligatoria"));
@@ -369,13 +392,37 @@ public class CrearJoc extends javax.swing.JDialog {
         }
     }
 
-    private void afegirEstoc(Map<Plataforma, Integer> estoc, JCheckBox checkBox,
+    private boolean afegirEstoc(Map<Plataforma, Integer> estoc, JCheckBox checkBox,
             JSpinner spinner, Plataforma plataforma) {
-        if (checkBox.isSelected()) {
-            int unitats = ((Number) spinner.getValue()).intValue();
-            estoc.put(plataforma, Math.max(0, unitats));
+        if (!checkBox.isSelected()) {
+            
+            return true; 
         }
+        try {
+            spinner.commitEdit();
+        } catch (ParseException ex) {
+            String text = ((JSpinner.DefaultEditor) spinner.getEditor())
+                    .getTextField().getText().trim();
+            
+            if (text.startsWith("-")) {
+                mostrarError(Textes.get("error.joc.estoc.negatiu"));
+            }
+            else {
+                mostrarError(Textes.get("error.joc.estoc.invalid"));
+            }
+            return false;
+        }
+            int unitats = ((Number) spinner.getValue()).intValue();
+            
+            if (unitats < 0) {
+                mostrarError(Textes.get("error.joc.estoc.negatiu"));
+                return false;
+            }
+            
+            estoc.put(plataforma, unitats);
+            return true;
     }
+    
 
     private void mostrarError(String missatge) {
         JOptionPane.showMessageDialog(this, missatge,
