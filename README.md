@@ -25,6 +25,32 @@ Aplicació desenvolupada amb Java Swing per gestionar el lloguer de videojocs: u
 - EL nom de l'usuari ha de començar amb majúscula.
 - El telèfon només pot contenir dígits i té un màxim de 15 caràcters.
 
+## Dades de prova
+
+En iniciar l'aplicació es carreguen:
+
+- 2 usuaris: Marc Rosselló Puig i Laia Serra Vidal.
+- 2 jocs: The Legend of Zelda i Forza Horizon.
+- 2 lloguers inicials, amb l'estoc ja descomptat.
+- Un dels lloguers està vençut a propòsit per comprovar la fila vermella.
+
+## Casos de proves i comprovacions
+S'han realitzat les següents proves per comprovar el funcionament de l'aplicació i la validació de les dades:
+
+### Lloguers
+- Registrar: el lloguer es registra correctament i que l'estoc de la plataforma disminueix.
+- Tornar: es pot retornar un lloguer actiu i l'estoc es recupera automàticament.
+
+### Usuaris:
+- Nom en minúscules: no s'accepta un nom si no comencça amb majúscula.
+- Introduir caràcters alfabètics al telèfon: només s'accepten dígits.
+- Introduir un DNI incorrecte: el DNI ha de cumplir amb els criteris establerts.
+
+### Jocs:
+- Crear un joc duplicat: no es permet registrar un joc que ja existeix.
+- Introduir valors numèrics negatius: no es permet introduir un stoc negatiu, ni mitjançant els controls ni escrivint directament amb teclat.
+- Esborrar un joc amb lloguers associats: no està permés eliminar un joc amb lloguers actius.
+
 ## Estructura del projecte
 ```text
 src/main/java/
@@ -46,17 +72,10 @@ Des de NetBeans:
 2. Executa'l amb **Run Project** (`F6`).
 3. La classe principal és `vista.FinestraPrincipal`.
 
-## Dades de prova
 
-En iniciar l'aplicació es carreguen:
-
-- 2 usuaris: Marc Rosselló Puig i Laia Serra Vidal.
-- 2 jocs: The Legend of Zelda i Forza Horizon.
-- 2 lloguers inicials, amb l'estoc ja descomptat.
-- Un dels lloguers està vençut a propòsit per comprovar la fila vermella.
 
 ## Notes
 
 - Les dades es mantenen en memòria: en tancar l'aplicació es reinicien.
 - Els textos de la interfície es troben a `Bundle_ca.properties`, guardat en UTF-8.
-- Durant el desenvolupament vaig tenir problemes per vincular el projecte de NetBeans amb GitHub. En un principi, la integració automàtica des de NetBeans no va funcionar correctament. Vaig continuar fent l'exercici i finalment vaig trobar l'origen de l'error.
+- Durant el desenvolupament vaig tenir problemes per vincular el projecte de NetBeans amb GitHub. En un principi, la integració automàtica des de NetBeans no va funcionar correctament. Tampoc estic segura que l'historial de commits hagi quedat ben reflectit, ja que també s'ha sobreescrit el repositori en el darrer moment.
