@@ -34,6 +34,17 @@ En iniciar l'aplicació es carreguen:
 - 2 lloguers inicials, amb l'estoc ja descomptat.
 - Un dels lloguers està vençut a propòsit per comprovar la fila vermella.
 
+## Validació
+
+Els formularis es validen amb validationapi.ValidationAPI. Els mètodes llancen ValidationException amb una clau (exemple, nom.buit) i es mostra l'error amb un JOptionPane. 
+
+Es va valorar implementar la llibreria ValidationLib dels vídeos, però es va descartar per a aquesta entrega ja que no cobreix les regles pròpies de l'enunciat. 
+
+A més, al intentar-ho amb el vídeo de guia, no apareixia l'opció d'afegir 'ValidationPanel' als contenidors de Swing. No podia trobar l'error i vaig decidir continuar la tasca. 
+Al mirar-ho una vegada feta la tasca, he descobert que el motiu era una confusió en el nom del jar a afegir a la llibreria: el vídeo ho presenta com 'validation' però el nom actual és 'simplevalidation'.
+Com l'enunciat no imposava missatges emergents o 'ValidationPanel' vaig decidir mantenir els errors amb 'JOptionPane'.
+
+
 ## Casos de proves i comprovacions
 S'han realitzat les següents proves per comprovar el funcionament de l'aplicació i la validació de les dades:
 
